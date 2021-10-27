@@ -10,6 +10,8 @@ Output - "One Dollar and Fifteen Cents"
 ### Live preview:
 https://benlittlenz.github.io/num-to-english/
 
+Input any number into the input box e.g. 1.15 and click "Convert number to currency"
+
 ### Limitations & Assumptions
 * Negative numbers are not supported.
 * Number values over a billion are not supported.
@@ -19,6 +21,8 @@ https://benlittlenz.github.io/num-to-english/
 * Typescript
 * Jest
 * Eslint & Prettier
+* Parcel Bundler
+* Github pages
 
 ### Clone the repo & install dependencies
 ```shell

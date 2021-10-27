@@ -1,5 +1,6 @@
 {
   "name": "num-to-english",
+  "homepage": "https://benlittlenz.github.io/num-to-english",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
