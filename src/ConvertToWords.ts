@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   convertButton.addEventListener("click", () => {
     const convertNumber = document.getElementById(
-      "converInput"
+      "convertInput"
     ) as HTMLFormElement;
     const result = convertNumToCurrency(Number(convertNumber.value));
 
@@ -20,7 +20,6 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 export function convertNumToCurrency(number: number): string {
-  console.log("convertNumToWords NUMBER ", number);
   if (number < 0) return "Negative numbers are not supported";
   if (number === 0) return "Zero";
 
@@ -42,6 +41,7 @@ export function convertNumToCurrency(number: number): string {
 
 function handleConvert(number: number): string[] {
   const words: string[] = [];
+  if (number === 0) return ["Zero"];
 
   const wordMatch = numberWordMapping.find(
     (elem) => Number(number) >= elem.number
@@ -69,11 +69,8 @@ function handleConvert(number: number): string[] {
         matchValue === "Thousand" ||
         matchValue === "Million")
     ) {
-      console.log({ matchValue });
-      console.log("IS POWER OF 10");
       const firstNumber = Number(String(number)[0]);
       if (firstNumber === 1) {
-        console.log("firstNumber", firstNumber);
         words.push(...handleConvert(firstNumber));
       }
     }
