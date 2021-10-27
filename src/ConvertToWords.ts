@@ -21,6 +21,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
 export function convertNumToCurrency(number: number): string {
   console.log("convertNumToWords NUMBER ", number);
+  if (number < 0) return "Negative numbers are not supported";
+  if (number === 0) return "Zero";
+
   const splitNumber = String(toFixed(number)).split(".");
 
   const words = [...handleConvert(Number(splitNumber[0]))];
@@ -44,25 +47,29 @@ function handleConvert(number: number): string[] {
     (elem) => Number(number) >= elem.number
   ) as NumberWordMap;
 
+  const matchValue = wordMatch.value;
+
+  // quotient dividing inputted # by matched number
   const quotient = Math.floor(number / wordMatch.number);
 
   // Remaining value i.e. 33 % 30 === 1.1
   const remaining = number % wordMatch.number;
-
-  const powerOfTen = number % 10 === 0;
-  console.log("powerOfTen >>>> ", powerOfTen);
-  console.log("quotient >>>> ", quotient);
-  console.log("remaining >>>> ", remaining);
-
   if (quotient === 1) {
     /*
       When a number is a power of 10 and starts with 1 (i.e. 100 or 1000) just the Hundred or Thousand value is returned. To resolve this, we check if
       A. the word match value is a power of 10
       B. the number starts with a 1
+      C. Word match is either Hundred, Thousand or Million
 
       If both statements are correct, we call the handleConvert function again
     */
-    if (Number(wordMatch.number) % 10 === 0) {
+    if (
+      Number(wordMatch.number) % 10 === 0 &&
+      (matchValue === "Hundred" ||
+        matchValue === "Thousand" ||
+        matchValue === "Million")
+    ) {
+      console.log({ matchValue });
       console.log("IS POWER OF 10");
       const firstNumber = Number(String(number)[0]);
       if (firstNumber === 1) {
@@ -70,9 +77,9 @@ function handleConvert(number: number): string[] {
         words.push(...handleConvert(firstNumber));
       }
     }
-    words.push(wordMatch.value);
+    words.push(matchValue);
   } else {
-    words.push(...handleConvert(quotient), wordMatch.value);
+    words.push(...handleConvert(quotient), matchValue);
   }
 
   // Recursion: Re-run handleConvert function with remaining value
