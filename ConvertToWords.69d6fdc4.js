@@ -297,14 +297,15 @@ document.addEventListener("DOMContentLoaded", function () {
   var convertButton = document.getElementById("convertBtn");
   var resultContainer = document.getElementById("resultContainer");
   convertButton.addEventListener("click", function () {
-    var convertNumber = document.getElementById("converInput");
+    var convertNumber = document.getElementById("convertInput");
     var result = convertNumToCurrency(Number(convertNumber.value));
     resultContainer.textContent = result;
   });
 });
 
 function convertNumToCurrency(number) {
-  console.log("convertNumToWords NUMBER ", number);
+  if (number < 0) return "Negative numbers are not supported";
+  if (number === 0) return "Zero";
   var splitNumber = String(lib_1.toFixed(number)).split(".");
 
   var words = __spreadArray([], handleConvert(Number(splitNumber[0])));
@@ -326,37 +327,35 @@ exports.convertNumToCurrency = convertNumToCurrency;
 
 function handleConvert(number) {
   var words = [];
+  if (number === 0) return ["Zero"];
   var wordMatch = lib_1.numberWordMapping.find(function (elem) {
     return Number(number) >= elem.number;
   });
+  var matchValue = wordMatch.value; // quotient dividing inputted # by matched number
+
   var quotient = Math.floor(number / wordMatch.number); // Remaining value i.e. 33 % 30 === 1.1
 
   var remaining = number % wordMatch.number;
-  var powerOfTen = number % 10 === 0;
-  console.log("powerOfTen >>>> ", powerOfTen);
-  console.log("quotient >>>> ", quotient);
-  console.log("remaining >>>> ", remaining);
 
   if (quotient === 1) {
     /*
       When a number is a power of 10 and starts with 1 (i.e. 100 or 1000) just the Hundred or Thousand value is returned. To resolve this, we check if
       A. the word match value is a power of 10
       B. the number starts with a 1
+      C. Word match is either Hundred, Thousand or Million
            If both statements are correct, we call the handleConvert function again
     */
-    if (Number(wordMatch.number) % 10 === 0) {
-      console.log("IS POWER OF 10");
+    if (Number(wordMatch.number) % 10 === 0 && (matchValue === "Hundred" || matchValue === "Thousand" || matchValue === "Million")) {
       var firstNumber = Number(String(number)[0]);
 
       if (firstNumber === 1) {
-        console.log("firstNumber", firstNumber);
         words.push.apply(words, handleConvert(firstNumber));
       }
     }
 
-    words.push(wordMatch.value);
+    words.push(matchValue);
   } else {
-    words.push.apply(words, __spreadArray(__spreadArray([], handleConvert(quotient)), [wordMatch.value]));
+    words.push.apply(words, __spreadArray(__spreadArray([], handleConvert(quotient)), [matchValue]));
   } // Recursion: Re-run handleConvert function with remaining value
 
 
@@ -391,7 +390,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51894" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "52771" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
